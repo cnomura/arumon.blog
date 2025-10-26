@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --color-bg: 246 245 252;
+  --color-bg-muted: 234 235 246;
+  --color-text: 30 30 32;
+  --color-text-dim: 99 101 108;
+  --color-accent: 124 58 237;
+  --color-accent-hover: 167 139 250;
+  --color-border: 210 210 220;
+}
+
+:root.dark {
+  color-scheme: dark;
+  --color-bg: 15 15 16;
+  --color-bg-muted: 22 24 28;
+  --color-text: 228 228 231;
+  --color-text-dim: 161 161 170;
+  --color-accent: 124 58 237;
+  --color-accent-hover: 167 139 250;
+  --color-border: 42 44 49;
+}
+
+body {
+  @apply bg-bg text-text antialiased;
+  font-feature-settings: "ss01","ss02","cv01","cv02";
+}
+
+/* prose styles for blog posts */
+.prose-custom {
+  @apply text-text max-w-none leading-relaxed;
+}
+.prose-custom h1,
+.prose-custom h2,
+.prose-custom h3 {
+  @apply text-text font-semibold tracking-tight;
+}
+.prose-custom p {
+  @apply text-text/90;
+}
+.prose-custom code {
+  @apply bg-bg-muted text-text px-1 py-0.5 rounded border border-border text-sm font-mono;
+}
+.prose-custom pre {
+  @apply bg-bg-muted text-text p-4 rounded-xl border border-border overflow-x-auto text-sm;
+}
+.prose-custom a {
+  @apply text-accent hover:text-accent-hover underline underline-offset-4;
+}
