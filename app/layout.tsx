@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
     title: "arumon.blog",
@@ -25,6 +26,7 @@ export default function RootLayout({
                         <Footer />
                     </div>
                 </ThemeProvider>
+                <Analytics />
             </body>
         </html>
     );
