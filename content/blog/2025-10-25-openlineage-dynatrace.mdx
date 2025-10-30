@@ -1,0 +1,62 @@
+---
+title: "OpenLineage + Dynatrace: observability for our ETLs"
+date: "2025-10-25"
+update: "2025-10-30"
+summary: "How standardized OpenLineage events and Dynatrace ingestion raised the resilience and data quality of our pipelines."
+tags: ["data engineering", "observability", "openlineage", "dynatrace", "data quality"]
+---
+
+Many teams talk about “visibility”, yet few can clearly spell out what ran, when it ran, and why it failed.
+
+## Why we talked about standards before tools
+
+Our pipelines already had logs, dashboards, and alerts, but none of that answered simple questions like *which job broke? which dataset did it touch?* Embracing the [OpenLineage](https://openlineage.io/apidocs/openapi/) specification is what made those pieces click. The real breakthrough was not a brand-new tool; it was agreeing on a contract that describes executions, inputs, outputs, and metadata.
+
+Adopting the OpenLineage schema forced us to name things that used to be “implicit”. We now publish events with:
+
+- **Jobs** versioned, with owners and a functional description.
+- **Runs** carrying a `runId`, timestamps, status, and categorized failures.
+- **Datasets** differentiating upstream sources (for example, `adls://raw/dynatrace/metrics`) and downstream outputs (`adls://curated/observability/lineage`), plus facets for schema, volume, and cost.
+- **Facets** for quality, performance, and custom fields that track the code issuing the execution.
+
+That standardization became the backbone of resilience: any job that fails to emit a valid event fails CI; any schema change without its corresponding facet throws an alert. Instead of firefighting with log screenshots, our pipelines now travel on rails.
+
+## How Dynatrace ingestion leveled up observability
+
+We instrumented our connectors to push the same batch of OpenLineage events into Dynatrace. The platform now stores both operational signals (latency, resource usage, infrastructure errors) and business metadata (lineage, owners, contracts). That lets us:
+
+- Visualize, in a single dashboard, the entire job lifecycle—from the webhook trigger all the way to the reporting dataset.
+- Correlate ingestion failures with infrastructure incidents without stitching spreadsheets together.
+- Maintain a centralized, harmonized, trustworthy view, because events are emitted at the source by the teams that actually craft the reporting data.
+
+Dynatrace turned into our convergence point: when someone asks “why is this report late?”, we open a panel and see the execution, the impacted datasets, and the tests that failed. That shared operational truth lowers friction between teams and speeds up remediation.
+
+## Resilience in practice
+
+With standardized descriptions, we automated answers that once depended on specialists:
+
+- Reprocessing became predictable: lineage outlines explicit dependencies, so we know exactly which datasets need to be rebuilt.
+- Incident playbooks now reference OpenLineage identifiers, avoiding ambiguous job nicknames.
+- Jobs gained fault tolerance: if an upstream dataset skips emitting a quality facet, the downstream pipeline enters a degraded mode or suspends ingestion with a clear message.
+
+This took effort. We built internal libraries that generate pre-filled OpenLineage events for Python, Spark, and Azure Data Factory, and we documented valid payload examples. The upfront cost paid off when new teams plugged into the ecosystem without relying on the core group.
+
+## Data quality as part of the flow, not an appendix
+
+Embedding data quality into the observability standard changed our conversations with the business. Every run publishes quality facets with metrics such as:
+
+- total ingested records and rejected records,
+- percentages of null or out-of-range values in critical fields,
+- contract compliance checks (for instance, timestamps always in UTC).
+
+Those facets appear alongside performance metrics. When an SLA is about to slip, we instantly know whether it is a technical bottleneck or a broken business rule. For finance, that means trusting that the revenue dashboard not only arrived on time, but also passed the tests that matter.
+
+## The next challenge: turning the standard into culture
+
+We are documenting guides and scaffolds so each new project is born “observable”. Current initiatives include:
+
+- building an internal catalog with reusable event samples and facet templates,
+- running workshops to teach how to interpret Dynatrace charts and traverse an OpenLineage graph,
+- defining minimum observability criteria before approving pipelines in architecture reviews.
+
+The goal is to ensure observability is not a heroic effort, but an intrinsic trait of every ETL we ship. When everyone emits standardized events and sees the same truth, evolving the business safely becomes a collective habit.
