@@ -1,6 +1,6 @@
 # arumon.blog
 
-A small personal blog built with Next.js 16 (App Router), Tailwind CSS, and a lightweight markdown pipeline. Posts live in `content/blog` as `.md` or `.mdx` files and are loaded at build time via `lib/posts.ts`.
+A small personal blog built with Next.js 16 (App Router), Tailwind CSS, and a lightweight markdown pipeline. Posts live in `content/blog` as `.md` or `.mdx` files and are loaded at build time via `lib/posts.ts` with Giscus for comment section. 
 
 ## Getting Started
 
