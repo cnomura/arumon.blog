@@ -8,35 +8,44 @@ export function ThemeToggle() {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        // Hydration-only state, so we explicitly allow this setState.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
+
+    const buttonClasses =
+        "flex h-8 w-8 items-center justify-center rounded-full border border-border bg-bg-muted text-sm transition-colors hover:border-accent/60 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60";
+    const placeholderIcon = "🌙";
 
     if (!mounted) {
         return (
             <button
                 type="button"
-                aria-pressed="false"
+                aria-pressed={false}
                 disabled
-                className="rounded-xl border border-border bg-bg-muted px-3 py-2 text-xs text-text/80 transition-colors"
+                className={buttonClasses}
             >
-                …
+                <span className="sr-only">Toggle theme</span>
+                <span aria-hidden className="text-base leading-none opacity-40">
+                    {placeholderIcon}
+                </span>
             </button>
         );
     }
 
     const currentTheme = theme === "system" ? resolvedTheme : theme;
     const isDark = currentTheme === "dark";
+    const icon = isDark ? "☀️" : "🌙";
 
     return (
         <button
             type="button"
             aria-pressed={isDark}
+            aria-label={`Activate ${isDark ? "light" : "dark"} mode`}
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="rounded-xl border border-border bg-bg-muted px-3 py-2 text-xs text-text/80 transition-colors hover:border-text/40 hover:text-text"
+            className={buttonClasses}
         >
-            {isDark ? "☀ Light" : "🌙 Dark"}
+            <span aria-hidden className="text-base leading-none transition-transform duration-150">
+                {icon}
+            </span>
         </button>
     );
 }
