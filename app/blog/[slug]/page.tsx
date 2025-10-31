@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
@@ -51,6 +52,15 @@ export default async function BlogPostPage({
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-16">
+            <div className="mb-6">
+                <Link
+                    href="/blog"
+                    className="inline-flex items-center gap-2 text-sm text-text/60 transition-colors hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                    <span aria-hidden>&larr;</span>
+                    Back to all posts
+                </Link>
+            </div>
             <article className="prose-custom">
                 <div className="mb-8 text-[12px] text-text/50">
                     {format(new Date(resolvedPost.date), "MMM dd, yyyy")}
